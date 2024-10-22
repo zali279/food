@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-jenkins
+    ports:
+      - "8082:8080"
+    volumes:
+      - jenkinsvol1:/var/jenkins_home
+    networks:
+      - jenkins_network
+    environment:
+      - POSTGRES_HOST=postgres
+  postgres:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: food
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - jenkins_network
+    ports:
+      - "5432:5432"
+networks:
+  jenkins_network:
+    driver: bridge
+volumes:
+  jenkinsvol1:
+  pgdata:
